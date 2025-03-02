@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="167.0869141" height="242.6669922" viewBox="0 0 167.0869141 242.6669922">
+    <!-- Card background -->
+    <rect width="167.0869141" height="242.6669922" rx="15" ry="15" fill="#2E3B4E" />
+    <!-- Decorative element for the hidden card, could represent pattern -->
+    <path d="M10,20 L10,220 L157,220 L157,20 Z" fill="#1F2A38" opacity="0.7"/>
+    <!-- Card corners and border -->
+    <rect x="5" y="5" width="157" height="232" rx="12" ry="12" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+    <!-- Placeholder text for hidden card -->
+    <text x="50%" y="50%" fill="#FFF" font-size="24" font-family="Arial" text-anchor="middle" dy=".3em"></text>
+</svg>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #dealer-hand, #player-hand { display: flex; justify-content: center; margin: 10px; }
+        .card { width: 100px; margin: 5px; }
+        button { margin: 10px; padding: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Blackjack</h1>
+
+    <button id="start">Start Game</button>
+    <button id="hit" disabled>Hit</button>
+    <button id="stand" disabled>Stand</button>
+
+    <h2>Dealer Hand</h2>
+    <div id="dealer-hand"></div>
+
+    <h2>Player Hand</h2>
+    <div id="player-hand"></div>
+
+    <h2 id="result"></h2>
+
+    <script>
+        $(document).ready(function() {
+            function renderHand(hand, elementId) {
+                let container = $(elementId);
+                container.empty();
+                hand.forEach(card => {
+                    container.append(`<img src="${card.img}" class="card">`);
+                });
+            }
+
+            $("#start").click(function() {
+                $.post("/start", function(data) {
+                    renderHand(data.player, "#player-hand");
+                    renderHand(data.dealer, "#dealer-hand");
+
+                    $("#hit, #stand").prop("disabled", false);
+                    $("#start").prop("disabled", true);
+                    $("#result").text("");
+                });
+            });
+
+            $("#hit").click(function() {
+                $.post("/hit", function(data) {
+                    renderHand(data.player, "#player-hand");
+
+                    if (data.result === "bust") {
+                        $("#result").text("You Busted! Dealer Wins.");
+                        $("#hit, #stand").prop("disabled", true);
+                        renderHand(data.dealer, "#dealer-hand");
+                        $("#start").prop("disabled", false);
+                    }
+                });
+            });
+
+            $("#stand").click(function() {
+                $.post("/stand", function(data) {
+                    renderHand(data.player, "#player-hand");
+                    renderHand(data.dealer, "#dealer-hand");
+
+                    let message = "";
+                    if (data.result === "win") message = "You Win!";
+                    else if (data.result === "lose") message = "You Lose!";
+                    else message = "It's a Draw!";
+
+                    $("#result").text(message);
+                    $("#hit, #stand").prop("disabled", true);
+                    $("#start").prop("disabled", false);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
